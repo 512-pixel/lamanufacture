@@ -174,21 +174,93 @@
 
 <!-- SETUP OVERLAY -->
 <div class="setup-overlay" id="setupOverlay">
-  <div class="setup-card">
+  <div class="setup-card" style="max-width:580px">
     <h2 class="setup-title">Connexion Supabase</h2>
     <p class="setup-sub">Entrez vos identifiants pour accéder au tableau de bord.</p>
+
     <div class="setup-field">
-      <label class="setup-label">URL du projet Supabase</label>
+      <label class="setup-label">URL du projet</label>
       <input class="setup-input" id="inputUrl" type="text" placeholder="https://xxxxxxxxxxxx.supabase.co">
-      <p class="setup-hint">Disponible dans <a href="https://supabase.com/dashboard" target="_blank">Settings → API</a> de votre projet</p>
+      <p class="setup-hint">Disponible dans <a href="https://supabase.com/dashboard" target="_blank">Settings → API</a></p>
     </div>
+
+    <!-- Key type selector -->
     <div class="setup-field">
-      <label class="setup-label">Clé Anon (publique)</label>
-      <input class="setup-input" id="inputKey" type="text" placeholder="eyJhbGciOiJIUzI1NiIs...">
-      <p class="setup-hint">Utilisez la clé <code>anon</code> pour la boutique, ou <code>service_role</code> pour l'admin (plus sécurisé).</p>
+      <label class="setup-label">Type de clé</label>
+      <div style="display:flex;gap:.6rem;margin-bottom:.8rem">
+        <button id="btnKeyAnon"        onclick="selectKeyType('anon')"         style="flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--or);background:var(--or);color:white;cursor:pointer">
+          anon (lecture seule)
+        </button>
+        <button id="btnKeyServiceRole" onclick="selectKeyType('service_role')" style="flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--creme);background:white;cursor:pointer;color:var(--gris)">
+          service_role (admin)
+        </button>
+      </div>
+      <!-- Anon hint -->
+      <div id="hintAnon" style="display:none;background:#fff8e7;border-left:3px solid var(--warning);padding:.8rem 1rem;font-size:.6rem;line-height:1.7;color:var(--gris)">
+        ⚠️ La clé <strong>anon</strong> est bloquée par le RLS — vous pourrez <em>lire</em> les produits mais pas les créer, modifier ou supprimer.<br>
+        Utilisez la clé <strong>service_role</strong> pour l'administration.
+      </div>
+      <!-- Service role hint -->
+      <div id="hintServiceRole" style="background:#eafaf1;border-left:3px solid var(--success);padding:.8rem 1rem;font-size:.6rem;line-height:1.7;color:var(--gris)">
+        ✅ La clé <strong>service_role</strong> bypasse le RLS et donne accès complet en lecture/écriture.<br>
+        Elle est stockée uniquement dans votre <code>localStorage</code> et ne quitte pas votre navigateur.
+      </div>
     </div>
+
+    <div class="setup-field">
+      <label class="setup-label" id="keyLabel">Clé service_role</label>
+      <div style="position:relative">
+        <input class="setup-input" id="inputKey" type="password" placeholder="eyJhbGciOiJIUzI1NiIs..." style="padding-right:3rem">
+        <button onclick="toggleKeyVisibility()" id="eyeBtn" style="position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gris-clair);font-size:.75rem">👁</button>
+      </div>
+      <p class="setup-hint">
+        Dans Supabase : <strong>Settings → API → Project API keys</strong><br>
+        Copiez la clé <code>service_role</code> (secret).
+      </p>
+    </div>
+
     <button class="btn-connect" onclick="connectSupabase()">Se connecter →</button>
-    <p style="font-size:.55rem;color:var(--gris-clair);margin-top:1rem;text-align:center">Vos clés sont sauvegardées localement (localStorage) et ne quittent pas votre navigateur.</p>
+    <p style="font-size:.55rem;color:var(--gris-clair);margin-top:1rem;text-align:center">
+      Clés stockées dans <code>localStorage</code> — elles ne quittent pas votre navigateur.
+    </p>
+
+    <!-- SQL helper collapsible -->
+    <details style="margin-top:1.5rem;border-top:1px solid var(--creme);padding-top:1rem">
+      <summary style="font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:var(--gris);font-weight:600;outline:none">
+        💡 Où trouver la clé service_role ?
+      </summary>
+      <div style="margin-top:.8rem;font-size:.6rem;color:var(--gris);line-height:1.8">
+        <ol style="padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem">
+          <li>Ouvrez votre projet sur <a href="https://supabase.com/dashboard" target="_blank" style="color:var(--or)">supabase.com/dashboard</a></li>
+          <li>Allez dans <strong>Settings</strong> (icône engrenage)</li>
+          <li>Cliquez sur <strong>API</strong></li>
+          <li>Sous <em>"Project API keys"</em>, copiez la clé <strong>service_role</strong></li>
+        </ol>
+        <div style="margin-top:1rem;background:#f8f4ef;padding:.8rem;border-left:2px solid var(--or)">
+          <p style="font-weight:600;margin-bottom:.3rem">Alternative : corriger le RLS pour la clé anon</p>
+          <p style="margin-bottom:.5rem">Si vous préférez utiliser la clé <code>anon</code>, copiez ce SQL dans <strong>SQL Editor</strong> de Supabase :</p>
+          <pre style="background:#1a1a1a;color:#c9a96e;padding:.8rem;font-size:.55rem;overflow-x:auto;border-radius:2px;font-family:monospace;line-height:1.6">-- Autoriser INSERT, UPDATE, DELETE pour la clé anon
+CREATE POLICY "Admin insert products"
+  ON products FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Admin update products"
+  ON products FOR UPDATE USING (true) WITH CHECK (true);
+
+CREATE POLICY "Admin delete products"
+  ON products FOR DELETE USING (true);
+
+CREATE POLICY "Admin insert categories"
+  ON categories FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Admin update categories"
+  ON categories FOR UPDATE USING (true) WITH CHECK (true);
+
+CREATE POLICY "Admin delete categories"
+  ON categories FOR DELETE USING (true);</pre>
+          <p style="color:var(--danger);font-size:.55rem;margin-top:.4rem">⚠️ Ces policies donnent un accès public total en écriture — à n'utiliser que pour les tests.</p>
+        </div>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -408,35 +480,76 @@ let unavailSizes  = new Set();
 let toastTimer;
 
 // ── CONNEXION ──
+let currentKeyType = 'service_role'; // default
+
+window.selectKeyType = function(type) {
+  currentKeyType = type;
+  document.getElementById('btnKeyAnon').style.cssText        = `flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid ${type==='anon'?'var(--or)':'var(--creme)'};background:${type==='anon'?'var(--or)':'white'};color:${type==='anon'?'white':'var(--gris)'};cursor:pointer`;
+  document.getElementById('btnKeyServiceRole').style.cssText = `flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid ${type==='service_role'?'var(--success)':'var(--creme)'};background:${type==='service_role'?'var(--success)':'white'};color:${type==='service_role'?'white':'var(--gris)'};cursor:pointer`;
+  document.getElementById('hintAnon').style.display          = type==='anon'        ? 'block' : 'none';
+  document.getElementById('hintServiceRole').style.display   = type==='service_role'? 'block' : 'none';
+  document.getElementById('keyLabel').textContent            = type==='service_role' ? 'Clé service_role (recommandée pour l\'admin)' : 'Clé anon (publique)';
+  document.getElementById('inputKey').placeholder            = type==='service_role' ? 'eyJhbGciOiJIUzI1NiIs… (service_role)' : 'eyJhbGciOiJIUzI1NiIs… (anon)';
+};
+
+window.toggleKeyVisibility = function() {
+  const inp = document.getElementById('inputKey');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+};
+
 window.connectSupabase = function() {
   const url = document.getElementById('inputUrl').value.trim();
   const key = document.getElementById('inputKey').value.trim();
   if (!url || !key) { adminToast('Veuillez remplir les deux champs.','error'); return; }
-  localStorage.setItem('sb_url', url);
-  localStorage.setItem('sb_key', key);
-  initAdmin(url, key);
+  if (!url.startsWith('https://')) { adminToast('URL invalide — doit commencer par https://','error'); return; }
+  localStorage.setItem('sb_url',      url);
+  localStorage.setItem('sb_key',      key);
+  localStorage.setItem('sb_key_type', currentKeyType);
+  initAdmin(url, key, currentKeyType);
 };
 
 window.disconnectSupabase = function() {
   localStorage.removeItem('sb_url');
   localStorage.removeItem('sb_key');
+  localStorage.removeItem('sb_key_type');
   location.reload();
 };
 
-function initAdmin(url, key) {
-  // window.supabase = the CDN library namespace; .createClient() gives our instance
+function initAdmin(url, key, keyType) {
+  // window.supabase = CDN lib; .createClient() returns our client instance
   sbClient = window.supabase.createClient(url, key);
   document.getElementById('setupOverlay').style.display = 'none';
+
+  // Show warning banner if using anon key
+  if (keyType === 'anon') {
+    showAnonWarning();
+  }
   loadAll();
 }
 
+function showAnonWarning() {
+  const banner = document.createElement('div');
+  banner.id = 'anonBanner';
+  banner.style.cssText = 'background:#fff3cd;border-bottom:1px solid #ffc107;padding:.6rem 2rem;font-size:.6rem;color:#856404;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap';
+  banner.innerHTML = `
+    <span>⚠️ Vous êtes connecté avec la clé <strong>anon</strong> — les modifications sont bloquées par le RLS Supabase. 
+    <a href="#" onclick="window.disconnectSupabase()" style="color:#856404;font-weight:600;text-decoration:underline">Reconnecter avec service_role →</a></span>
+  `;
+  document.querySelector('.admin-body').insertAdjacentElement('beforebegin', banner);
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-  const url = localStorage.getItem('sb_url');
-  const key = localStorage.getItem('sb_key');
+  const url     = localStorage.getItem('sb_url');
+  const key     = localStorage.getItem('sb_key');
+  const keyType = localStorage.getItem('sb_key_type') || 'service_role';
+
+  // Restore key type UI
+  window.selectKeyType(keyType);
+
   if (url && key) {
     document.getElementById('inputUrl').value = url;
     document.getElementById('inputKey').value = key;
-    initAdmin(url, key);
+    initAdmin(url, key, keyType);
   }
   buildSizesSelector();
   // Auto-generate slug from name
