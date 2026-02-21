@@ -394,9 +394,17 @@ CREATE POLICY "Admin delete categories"
           <textarea id="fDesc" placeholder="Description du produit…"></textarea>
         </div>
         <div class="field span2">
-          <label>URL de l'image</label>
-          <input type="url" id="fImageUrl" placeholder="https://…" oninput="previewImg()">
-          <img id="imgPreview" class="img-preview" alt="Aperçu">
+          <label>Photos du produit <span style="font-weight:300;text-transform:none;letter-spacing:0">(ajoutez jusqu'à 10 URLs — la 1ère sera la photo principale)</span></label>
+          <div id="imagesManager">
+            <!-- inputs injectés dynamiquement -->
+          </div>
+          <button type="button" onclick="addImageInput()" style="margin-top:.6rem;background:none;border:1px dashed var(--creme);padding:.5rem 1rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;color:var(--gris-clair);width:100%;transition:border-color .2s,color .2s"
+            onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'"
+            onmouseout="this.style.borderColor='var(--creme)';this.style.color='var(--gris-clair)'">
+            + Ajouter une photo
+          </button>
+          <!-- Prévisualisation galerie -->
+          <div id="imagesPreview" style="display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem"></div>
         </div>
         <div class="field span2">
           <label>Tailles disponibles <span style="font-weight:300;text-transform:none;letter-spacing:0">(cliquez pour sélectionner, long-clic = indisponible)</span></label>
@@ -710,25 +718,88 @@ function refreshCatSelect() {
   if(cur) sel.value = cur;
 }
 
-window.previewImg = function() {
-  const url = document.getElementById('fImageUrl').value;
-  const img = document.getElementById('imgPreview');
-  if(url){ img.src=url; img.classList.add('visible'); }
-  else    img.classList.remove('visible');
-};
+// ── MULTI-IMAGES MANAGER ──
+function addImageInput(url = '') {
+  const mgr = document.getElementById('imagesManager');
+  const inputs = mgr.querySelectorAll('.img-url-input');
+  if (inputs.length >= 10) { adminToast('Maximum 10 photos par produit','info'); return; }
+
+  const idx = inputs.length;
+  const row = document.createElement('div');
+  row.className = 'img-url-row';
+  row.style.cssText = 'display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem';
+  row.innerHTML = `
+    <span style="font-size:.5rem;letter-spacing:.1em;color:var(--gris-clair);min-width:20px;text-align:right">${idx+1}</span>
+    <input type="url" class="img-url-input" placeholder="https://…" value="${url}"
+      style="flex:1;border:1px solid var(--creme);padding:.6rem .8rem;font-family:'Montserrat',sans-serif;font-size:.65rem;outline:none;background:var(--fond);transition:border-color .2s"
+      oninput="refreshImagesPreview()" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--creme)'">
+    <button type="button" onclick="removeImageInput(this)" title="Supprimer"
+      style="background:rgba(231,76,60,.1);border:none;color:var(--danger);width:28px;height:28px;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s"
+      onmouseover="this.style.background='var(--danger)';this.style.color='white'"
+      onmouseout="this.style.background='rgba(231,76,60,.1)';this.style.color='var(--danger)'">✕</button>
+  `;
+  mgr.appendChild(row);
+  refreshImageNumbers();
+}
+
+function removeImageInput(btn) {
+  btn.closest('.img-url-row').remove();
+  refreshImageNumbers();
+  refreshImagesPreview();
+}
+window.removeImageInput = removeImageInput;
+window.addImageInput = addImageInput;
+
+function refreshImageNumbers() {
+  document.querySelectorAll('#imagesManager .img-url-row').forEach((row, i) => {
+    row.querySelector('span').textContent = i + 1;
+  });
+}
+
+function refreshImagesPreview() {
+  const urls = getImageUrls();
+  const preview = document.getElementById('imagesPreview');
+  if (!urls.length) { preview.innerHTML = ''; return; }
+  preview.innerHTML = urls.map((url, i) => `
+    <div style="position:relative;flex-shrink:0">
+      <img src="${url}" alt="" loading="lazy"
+        style="width:72px;height:90px;object-fit:cover;background:var(--creme);border:2px solid ${i===0?'var(--or)':'var(--creme)'}"
+        onerror="this.style.opacity='.2'">
+      ${i===0 ? `<span style="position:absolute;bottom:0;left:0;right:0;background:var(--or);color:white;font-size:.4rem;letter-spacing:.1em;text-align:center;padding:.15rem">Principale</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function getImageUrls() {
+  return Array.from(document.querySelectorAll('#imagesManager .img-url-input'))
+    .map(i => i.value.trim())
+    .filter(Boolean);
+}
+
+function clearImageInputs() {
+  document.getElementById('imagesManager').innerHTML = '';
+  document.getElementById('imagesPreview').innerHTML = '';
+}
+
+function setImageInputs(urls) {
+  clearImageInputs();
+  if (!urls || !urls.length) { addImageInput(); return; }
+  urls.forEach(url => addImageInput(url));
+  refreshImagesPreview();
+}
 
 // ── PRODUCT MODAL ──
 window.openProductModal = function(id=null) {
   selectedSizes = new Set(); unavailSizes = new Set(); refreshSizePills();
   document.getElementById('editId').value = '';
   document.getElementById('modalTitle').textContent = 'Nouveau produit';
-  ['fName','fBrand','fDesc','fImageUrl','fPrice','fOldPrice','fStock'].forEach(f => {
-    document.getElementById(f).value = f==='fBrand' ? 'Maison Noir' : '';
+  ['fName','fBrand','fDesc','fPrice','fOldPrice','fStock'].forEach(f => {
+    document.getElementById(f).value = f==='fBrand' ? 'La Manufacture' : '';
   });
   document.getElementById('fIsNew').checked    = false;
   document.getElementById('fIsActive').checked = true;
-  document.getElementById('imgPreview').classList.remove('visible');
   refreshCatSelect();
+  setImageInputs([]);  // 1 champ vide par défaut
 
   if(id) {
     const p = products.find(x=>x.id===id);
@@ -738,17 +809,18 @@ window.openProductModal = function(id=null) {
     document.getElementById('fName').value              = p.name||'';
     document.getElementById('fBrand').value             = p.brand||'';
     document.getElementById('fDesc').value              = p.description||'';
-    document.getElementById('fImageUrl').value          = p.image_url||'';
     document.getElementById('fPrice').value             = p.price||'';
     document.getElementById('fOldPrice').value          = p.old_price||'';
     document.getElementById('fStock').value             = p.stock||0;
     document.getElementById('fIsNew').checked           = !!p.is_new;
     document.getElementById('fIsActive').checked        = p.is_active !== false;
     document.getElementById('fCategory').value          = p.category_id||'';
-    if(p.image_url) window.previewImg();
     (p.sizes||[]).forEach(s=>selectedSizes.add(s));
     (p.unavailable_sizes||[]).forEach(s=>unavailSizes.add(s));
     refreshSizePills();
+    // Charger les images : priorité à p.images, fallback sur p.image_url
+    const imgs = (p.images && p.images.length) ? p.images : (p.image_url ? [p.image_url] : []);
+    setImageInputs(imgs);
   }
   document.getElementById('productModal').classList.add('open');
 };
@@ -763,14 +835,17 @@ window.saveProduct = async function() {
   if(!name)           { adminToast('Le nom est requis','error');  return; }
   if(!price||price<=0){ adminToast('Le prix est requis','error'); return; }
 
+  const images = getImageUrls();
+
   const payload = {
     name,
-    brand:              document.getElementById('fBrand').value.trim() || 'Maison Noir',
+    brand:              document.getElementById('fBrand').value.trim() || 'La Manufacture',
     description:        document.getElementById('fDesc').value.trim()  || null,
     price,
     old_price:          parseFloat(document.getElementById('fOldPrice').value) || null,
     category_id:        document.getElementById('fCategory').value || null,
-    image_url:          document.getElementById('fImageUrl').value.trim() || null,
+    images:             images,
+    image_url:          images[0] || null,   // compatibilité rétroactive
     sizes:              Array.from(selectedSizes),
     unavailable_sizes:  Array.from(unavailSizes),
     stock:              parseInt(document.getElementById('fStock').value) || 0,
