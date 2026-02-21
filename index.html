@@ -447,12 +447,13 @@
 // ════════════════════════════════════════════
 // ⚙️  CONFIGURATION — Remplacez ces valeurs
 // ════════════════════════════════════════════
-const SUPABASE_URL      = 'https://gjwiroqpsikbhwjcruwf.supabase.co';      // ex: https://xxxx.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdqd2lyb3Fwc2lrYmh3amNydXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2OTc2NTEsImV4cCI6MjA4NzI3MzY1MX0.8DKrtmhIZ7YpkntGg_s3sGWWDhe76mcrpY1Ei6h_aTs'; // clé publique "anon"
+const SUPABASE_URL      = 'VOTRE_URL_SUPABASE';      // ex: https://xxxx.supabase.co
+const SUPABASE_ANON_KEY = 'VOTRE_ANON_KEY_SUPABASE'; // clé publique "anon"
 // ════════════════════════════════════════════
 
 const isConfigured = SUPABASE_URL !== 'VOTRE_URL_SUPABASE';
-let supabase = null;
+// ⚠️ Renamed to avoid conflict with the global `supabase` object from the CDN lib
+let sbClient = null;
 let allProducts = [];
 let allCategories = [];
 let currentFilter = 'Tous';
@@ -467,7 +468,8 @@ async function init() {
     renderSkeletons();
     return;
   }
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // window.supabase is the CDN library; .createClient() returns our client instance
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   await loadCategories();
   await loadProducts();
   initScrollObserver();
@@ -475,7 +477,7 @@ async function init() {
 
 // ── CATEGORIES ──
 async function loadCategories() {
-  const { data, error } = await supabase.from('categories').select('*').order('name');
+  const { data, error } = await sbClient.from('categories').select('*').order('name');
   if (error) { console.error(error); return; }
   allCategories = data;
   renderCategories();
@@ -517,7 +519,7 @@ function renderFilterChips() {
 // ── PRODUCTS ──
 async function loadProducts() {
   renderSkeletons();
-  const { data, error } = await supabase
+  const { data, error } = await sbClient
     .from('products')
     .select('*, categories(name, slug)')
     .eq('is_active', true)
@@ -606,8 +608,10 @@ function filterCat(cat) {
   renderProducts(cat);
   document.getElementById('products').scrollIntoView({behavior:'smooth'});
 }
+window.filterCat = filterCat;
 
 function sortProducts(val) { renderProducts(currentFilter, val); }
+window.sortProducts = sortProducts;
 
 function selectSize(id, size, e) {
   e.stopPropagation();
@@ -615,6 +619,7 @@ function selectSize(id, size, e) {
   document.querySelectorAll(`#sizes-${id} .size-btn`).forEach(b => b.classList.remove('selected'));
   e.target.classList.add('selected');
 }
+window.selectSize = selectSize;
 
 function toggleWish(id, e) {
   e.stopPropagation();
@@ -622,6 +627,7 @@ function toggleWish(id, e) {
   btn.classList.toggle('active');
   showToast(btn.classList.contains('active') ? 'Ajouté aux favoris ♥' : 'Retiré des favoris');
 }
+window.toggleWish = toggleWish;
 
 // ── CART ──
 function addToCart(id) {
@@ -635,11 +641,13 @@ function addToCart(id) {
   updateCartUI();
   showToast(`${p.name} (${size}) ajouté`);
 }
+window.addToCart = addToCart;
 
 function removeFromCart(id, size) {
   cart = cart.filter(i => !(i.id===id && i.size===size));
   updateCartUI();
 }
+window.removeFromCart = removeFromCart;
 
 function changeQty(id, size, delta) {
   const item = cart.find(i => i.id===id && i.size===size);
@@ -648,6 +656,7 @@ function changeQty(id, size, delta) {
   if (item.qty <= 0) removeFromCart(id, size);
   else updateCartUI();
 }
+window.changeQty = changeQty;
 
 function updateCartUI() {
   const count = cart.reduce((s,i) => s+i.qty, 0);
@@ -686,6 +695,7 @@ function toggleCart() {
   document.getElementById('cartModal').classList.toggle('open');
   document.body.style.overflow = document.getElementById('cartModal').classList.contains('open') ? 'hidden' : '';
 }
+window.toggleCart = toggleCart;
 
 // ── MISC ──
 function showToast(msg) {
@@ -700,8 +710,10 @@ function subscribeNewsletter() {
   if (inp.value && inp.value.includes('@')) { showToast('Inscription confirmée ! Merci.'); inp.value=''; }
   else showToast('Veuillez entrer un email valide.');
 }
+window.subscribeNewsletter = subscribeNewsletter;
 
 function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+window.toggleMobileMenu = toggleMobileMenu;
 
 function initScrollObserver() {
   const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.1});
