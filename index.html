@@ -243,6 +243,126 @@
   ::-webkit-scrollbar{width:4px}
   ::-webkit-scrollbar-track{background:var(--creme)}
   ::-webkit-scrollbar-thumb{background:var(--or)}
+
+  /* ── PAGE PRODUIT (overlay) ── */
+  .pdp-overlay{position:fixed;inset:0;z-index:1800;background:var(--fond);overflow-y:auto;
+    opacity:0;pointer-events:none;transform:translateY(30px);transition:opacity .35s ease,transform .35s ease}
+  .pdp-overlay.open{opacity:1;pointer-events:all;transform:translateY(0)}
+  .pdp-bar{position:sticky;top:0;z-index:10;background:rgba(245,240,235,.95);backdrop-filter:blur(12px);
+    display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;
+    border-bottom:1px solid rgba(201,169,110,.15)}
+  .pdp-back{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:.6rem;
+    font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gris);font-family:'Montserrat',sans-serif;
+    transition:color .2s}
+  .pdp-back:hover{color:var(--noir)}
+  .pdp-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5}
+  .pdp-breadcrumb{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gris-clair)}
+  .pdp-breadcrumb span{color:var(--or)}
+
+  .pdp-body{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:1400px;margin:0 auto;min-height:calc(100vh - 60px)}
+
+  /* Galerie */
+  .pdp-gallery{position:sticky;top:60px;height:calc(100vh - 60px);display:flex;flex-direction:column;gap:.8rem;padding:2rem}
+  .pdp-main-img{flex:1;overflow:hidden;background:var(--creme);position:relative;cursor:zoom-in}
+  .pdp-main-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+  .pdp-main-img:hover img{transform:scale(1.04)}
+  .pdp-main-img .placeholder-gallery{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  .pdp-thumbs{display:flex;gap:.6rem;overflow-x:auto;padding-bottom:.2rem;flex-shrink:0}
+  .pdp-thumbs::-webkit-scrollbar{height:2px}
+  .pdp-thumb{width:72px;height:90px;flex-shrink:0;cursor:pointer;overflow:hidden;border:2px solid transparent;
+    transition:border-color .2s;opacity:.6;transition:opacity .2s,border-color .2s}
+  .pdp-thumb.active,.pdp-thumb:hover{border-color:var(--or);opacity:1}
+  .pdp-thumb img{width:100%;height:100%;object-fit:cover}
+
+  /* Navigation galerie (flèches) */
+  .pdp-gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:white;border:none;
+    width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);transition:background .2s,transform .2s;z-index:2}
+  .pdp-gallery-nav:hover{background:var(--or)}
+  .pdp-gallery-nav:hover svg{stroke:white}
+  .pdp-gallery-nav svg{width:14px;height:14px;stroke:var(--gris);fill:none;stroke-width:2}
+  .pdp-gallery-nav.prev{left:.8rem}
+  .pdp-gallery-nav.next{right:.8rem}
+
+  /* Lightbox */
+  .pdp-lightbox{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.92);display:flex;
+    align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+  .pdp-lightbox.open{opacity:1;pointer-events:all}
+  .pdp-lightbox img{max-width:90vw;max-height:90vh;object-fit:contain}
+  .pdp-lightbox-close{position:absolute;top:1.5rem;right:2rem;background:none;border:none;
+    color:white;font-size:2rem;cursor:pointer;line-height:1}
+  .pdp-lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.2);color:white;width:44px;height:44px;cursor:pointer;
+    font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
+  .pdp-lightbox-nav:hover{background:rgba(255,255,255,.25)}
+  .pdp-lightbox-nav.prev{left:2rem}
+  .pdp-lightbox-nav.next{right:2rem}
+  .pdp-lightbox-counter{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);
+    color:rgba(255,255,255,.5);font-size:.6rem;letter-spacing:.2em}
+
+  /* Infos produit */
+  .pdp-info{padding:4rem 4rem 4rem 5rem;display:flex;flex-direction:column}
+  .pdp-brand{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--or);margin-bottom:.8rem}
+  .pdp-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:300;
+    line-height:1.1;margin-bottom:1rem}
+  .pdp-price-block{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:2rem;
+    border-bottom:1px solid var(--creme)}
+  .pdp-price{font-size:1.6rem;font-weight:500;font-family:'Cormorant Garamond',serif}
+  .pdp-old-price{font-size:1rem;color:var(--gris-clair);text-decoration:line-through}
+  .pdp-discount{background:var(--or);color:white;font-size:.5rem;letter-spacing:.15em;
+    text-transform:uppercase;padding:.3rem .7rem;font-weight:600}
+
+  .pdp-section-title{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gris);
+    font-weight:600;margin-bottom:.8rem}
+  .pdp-sizes{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
+  .pdp-size-btn{min-width:44px;height:44px;padding:0 .8rem;border:1px solid var(--creme);background:white;
+    font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:500;cursor:pointer;
+    transition:background .2s,border-color .2s,color .2s;display:flex;align-items:center;justify-content:center}
+  .pdp-size-btn:hover:not(.na-size){background:var(--noir);border-color:var(--noir);color:white}
+  .pdp-size-btn.selected-size{background:var(--noir);border-color:var(--noir);color:white}
+  .pdp-size-btn.na-size{opacity:.3;cursor:not-allowed;text-decoration:line-through;position:relative}
+
+  .pdp-cta{display:flex;flex-direction:column;gap:.8rem;margin-bottom:2.5rem}
+  .pdp-add-btn{background:var(--noir);color:white;border:none;padding:1.1rem;font-family:'Montserrat',sans-serif;
+    font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:background .3s;font-weight:500}
+  .pdp-add-btn:hover{background:var(--or)}
+  .pdp-wish-btn{background:transparent;color:var(--gris);border:1px solid var(--creme);padding:1rem;
+    font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+    cursor:pointer;transition:border-color .2s,color .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+  .pdp-wish-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;transition:fill .2s}
+  .pdp-wish-btn:hover,.pdp-wish-btn.active{border-color:var(--noir);color:var(--noir)}
+  .pdp-wish-btn.active svg{fill:#e74c3c;stroke:#e74c3c}
+
+  .pdp-desc{font-size:.75rem;line-height:1.9;color:var(--gris);margin-bottom:2rem}
+  .pdp-meta{border-top:1px solid var(--creme);padding-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .pdp-meta-item{font-size:.6rem;color:var(--gris-clair);display:flex;align-items:center;gap:.5rem}
+  .pdp-meta-item svg{width:14px;height:14px;stroke:var(--or);fill:none;stroke-width:1.5;flex-shrink:0}
+
+  /* Accordéon détails */
+  .pdp-accordion{border-top:1px solid var(--creme);margin-top:1.5rem}
+  .pdp-acc-item{border-bottom:1px solid var(--creme)}
+  .pdp-acc-trigger{width:100%;background:none;border:none;display:flex;justify-content:space-between;
+    align-items:center;padding:1rem 0;cursor:pointer;font-family:'Montserrat',sans-serif;
+    font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gris);font-weight:500}
+  .pdp-acc-trigger svg{width:12px;height:12px;stroke:var(--gris);fill:none;stroke-width:2;transition:transform .3s}
+  .pdp-acc-trigger.open svg{transform:rotate(45deg)}
+  .pdp-acc-content{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .pdp-acc-content.open{max-height:300px}
+  .pdp-acc-content p{font-size:.7rem;line-height:1.8;color:var(--gris);padding-bottom:1rem}
+
+  /* Responsive page produit */
+  @media(max-width:900px){
+    .pdp-body{grid-template-columns:1fr}
+    .pdp-gallery{position:relative;top:0;height:auto;min-height:70vw}
+    .pdp-main-img{min-height:60vw}
+    .pdp-info{padding:2rem}
+    .pdp-bar{padding:1rem 1.5rem}
+  }
+  @media(max-width:600px){
+    .pdp-info{padding:1.5rem}
+    .pdp-name{font-size:1.8rem}
+    .pdp-lightbox-nav{display:none}
+  }
 </style>
 </head>
 <body>
@@ -419,6 +539,112 @@
   </div>
 </footer>
 
+<!-- PAGE PRODUIT (overlay SPA) -->
+<div class="pdp-overlay" id="pdpOverlay" role="dialog" aria-modal="true">
+
+  <!-- Barre de navigation -->
+  <div class="pdp-bar">
+    <button class="pdp-back" onclick="closePDP()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour
+    </button>
+    <span class="pdp-breadcrumb" id="pdpBreadcrumb">Boutique / <span>—</span></span>
+    <button class="nav-icon" onclick="toggleCart()" style="position:relative">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-count" id="cartCountPDP">0</span>
+    </button>
+  </div>
+
+  <div class="pdp-body">
+
+    <!-- Galerie -->
+    <div class="pdp-gallery">
+      <div class="pdp-main-img" id="pdpMainImg" onclick="openLightbox()">
+        <button class="pdp-gallery-nav prev" onclick="event.stopPropagation();galleryNav(-1)">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="pdp-gallery-nav next" onclick="event.stopPropagation();galleryNav(1)">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <!-- image injectée dynamiquement -->
+      </div>
+      <div class="pdp-thumbs" id="pdpThumbs"></div>
+    </div>
+
+    <!-- Infos -->
+    <div class="pdp-info">
+      <p class="pdp-brand" id="pdpBrand"></p>
+      <h1 class="pdp-name" id="pdpName"></h1>
+
+      <div class="pdp-price-block">
+        <span class="pdp-price" id="pdpPrice"></span>
+        <span class="pdp-old-price" id="pdpOldPrice" style="display:none"></span>
+        <span class="pdp-discount" id="pdpDiscount" style="display:none"></span>
+      </div>
+
+      <!-- Tailles -->
+      <div id="pdpSizesWrap" style="margin-bottom:2rem">
+        <p class="pdp-section-title">Taille</p>
+        <div class="pdp-sizes" id="pdpSizes"></div>
+      </div>
+
+      <!-- CTA -->
+      <div class="pdp-cta">
+        <button class="pdp-add-btn" id="pdpAddBtn" onclick="pdpAddToCart()">Ajouter au panier</button>
+        <button class="pdp-wish-btn" id="pdpWishBtn" onclick="pdpToggleWish()">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Ajouter aux favoris
+        </button>
+      </div>
+
+      <!-- Description -->
+      <p class="pdp-desc" id="pdpDesc"></p>
+
+      <!-- Méta -->
+      <div class="pdp-meta">
+        <span class="pdp-meta-item"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison offerte dès 150€</span>
+        <span class="pdp-meta-item"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Retours 30 jours</span>
+        <span class="pdp-meta-item" id="pdpStockMeta"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <span class="pdp-meta-item"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Expédié en 48h</span>
+      </div>
+
+      <!-- Accordéon -->
+      <div class="pdp-accordion">
+        <div class="pdp-acc-item">
+          <button class="pdp-acc-trigger" onclick="toggleAcc(this)">
+            Composition & Entretien
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="pdp-acc-content"><p>100% matières sélectionnées. Lavage délicat recommandé. Voir étiquette pour instructions complètes.</p></div>
+        </div>
+        <div class="pdp-acc-item">
+          <button class="pdp-acc-trigger" onclick="toggleAcc(this)">
+            Livraison & Retours
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="pdp-acc-content"><p>Livraison offerte en France dès 150€. Expédition sous 48h ouvrées. Retours gratuits sous 30 jours, article non porté avec étiquettes.</p></div>
+        </div>
+        <div class="pdp-acc-item">
+          <button class="pdp-acc-trigger" onclick="toggleAcc(this)">
+            Guide des tailles
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="pdp-acc-content"><p>XS : 34–36 • S : 36–38 • M : 38–40 • L : 40–42 • XL : 42–44 • XXL : 44–46. En cas de doute, prenez la taille supérieure.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="pdp-lightbox" id="pdpLightbox" onclick="closeLightbox()">
+  <button class="pdp-lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="pdp-lightbox-nav prev" onclick="event.stopPropagation();lightboxNav(-1)">‹</button>
+  <img id="pdpLightboxImg" src="" alt="">
+  <button class="pdp-lightbox-nav next" onclick="event.stopPropagation();lightboxNav(1)">›</button>
+  <span class="pdp-lightbox-counter" id="pdpLightboxCounter"></span>
+</div>
+
 <!-- CART -->
 <div class="cart-modal" id="cartModal">
   <div class="cart-backdrop" onclick="toggleCart()"></div>
@@ -563,13 +789,15 @@ function renderProducts(filter=currentFilter, sortVal='default') {
     const sizes = p.sizes || [];
     const unavail = p.unavailable_sizes || [];
     const hasSale = !!p.old_price;
+    // Support both legacy image_url and new images array
+    const thumb = (p.images && p.images.length) ? p.images[0] : p.image_url;
     return `
-    <div class="product-card" data-id="${p.id}">
+    <div class="product-card" data-id="${p.id}" onclick="openPDP('${p.id}')">
       <div class="product-img-wrap">
-        ${p.image_url
-          ? `<img class="product-thumb" src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+        ${thumb
+          ? `<img class="product-thumb" src="${thumb}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
           : ''}
-        <div class="product-thumb placeholder-img" style="${p.image_url?'display:none':''}">
+        <div class="product-thumb placeholder-img" style="${thumb?'display:none':''}">
           <svg viewBox="0 0 100 120" width="80" xmlns="http://www.w3.org/2000/svg" opacity=".3">
             <ellipse cx="50" cy="20" rx="14" ry="16" fill="#c9a96e"/>
             <path d="M22,50 Q15,70 18,100 L82,100 Q85,70 78,50 Q65,38 50,36 Q35,38 22,50Z" fill="#c9a96e"/>
@@ -584,18 +812,18 @@ function renderProducts(filter=currentFilter, sortVal='default') {
           <div class="size-quick" id="sizes-${p.id}">
             ${sizes.map(s => `<button class="size-btn${unavail.includes(s)?' unavailable':''}" onclick="selectSize('${p.id}','${s}',event)" ${unavail.includes(s)?'disabled':''}>${s}</button>`).join('')}
           </div>
-          <button class="add-to-cart" onclick="addToCart('${p.id}')">Ajouter au panier</button>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('${p.id}')">Ajouter au panier</button>
         </div>
       </div>
       <div class="product-meta">
-        <p class="product-brand">${p.brand || 'Maison Noir'}</p>
+        <p class="product-brand">${p.brand || 'La Manufacture'}</p>
         <p class="product-name">${p.name}</p>
         <div class="product-price">
           <span class="price-current">${Number(p.price).toFixed(2).replace('.',',')} €</span>
           ${p.old_price ? `<span class="price-old">${Number(p.old_price).toFixed(2).replace('.',',')} €</span>` : ''}
         </div>
       </div>
-      <button class="add-mobile" onclick="addToCart('${p.id}')">+ Ajouter au panier</button>
+      <button class="add-mobile" onclick="event.stopPropagation();addToCart('${p.id}')">+ Ajouter au panier</button>
     </div>`;
   }).join('');
 }
@@ -662,6 +890,7 @@ function updateCartUI() {
   const count = cart.reduce((s,i) => s+i.qty, 0);
   const total = cart.reduce((s,i) => s+Number(i.price)*i.qty, 0);
   document.getElementById('cartCount').textContent = count;
+  const el = document.getElementById('cartCountPDP'); if (el) el.textContent = count;
   const items = document.getElementById('cartItems');
   const footer = document.getElementById('cartFooter');
   if (!cart.length) {
@@ -731,6 +960,229 @@ document.querySelectorAll('button,a,.product-card,.cat-card').forEach(el => {
   el.addEventListener('mouseenter',()=>{ cursor.style.width='16px'; cursor.style.height='16px'; ring.style.width='50px'; ring.style.height='50px'; });
   el.addEventListener('mouseleave',()=>{ cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
 });
+
+// ══════════════════════════════════════════════
+// ── PAGE PRODUIT (PDP) ──
+// ══════════════════════════════════════════════
+let pdpProduct   = null;
+let pdpImages    = [];
+let pdpImgIndex  = 0;
+let pdpWished    = new Set();
+let pdpSize      = null;
+
+function openPDP(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) return;
+  pdpProduct  = p;
+  pdpImages   = (p.images && p.images.length) ? p.images : (p.image_url ? [p.image_url] : []);
+  pdpImgIndex = 0;
+  pdpSize     = null;
+
+  // Breadcrumb
+  document.getElementById('pdpBreadcrumb').innerHTML =
+    `Boutique / <span>${p.categories?.name || ''}</span> / ${p.name}`;
+
+  // Brand & Name
+  document.getElementById('pdpBrand').textContent = p.brand || 'La Manufacture';
+  document.getElementById('pdpName').textContent  = p.name;
+
+  // Prix
+  document.getElementById('pdpPrice').textContent = Number(p.price).toFixed(2).replace('.',',') + ' €';
+  const oldEl = document.getElementById('pdpOldPrice');
+  const discEl = document.getElementById('pdpDiscount');
+  if (p.old_price) {
+    oldEl.textContent  = Number(p.old_price).toFixed(2).replace('.',',') + ' €';
+    oldEl.style.display = 'inline';
+    const pct = Math.round((1 - p.price / p.old_price) * 100);
+    discEl.textContent  = `−${pct}%`;
+    discEl.style.display = 'inline';
+  } else {
+    oldEl.style.display = discEl.style.display = 'none';
+  }
+
+  // Tailles
+  const sizes   = p.sizes || [];
+  const unavail = p.unavailable_sizes || [];
+  const sizesEl = document.getElementById('pdpSizes');
+  if (sizes.length) {
+    sizesEl.innerHTML = sizes.map(s => `
+      <button class="pdp-size-btn${unavail.includes(s)?' na-size':''}"
+        onclick="${unavail.includes(s)?'':'selectPDPSize(\''+s+'\')'}"
+        ${unavail.includes(s)?'disabled':''}>${s}</button>
+    `).join('');
+    document.getElementById('pdpSizesWrap').style.display = 'block';
+  } else {
+    document.getElementById('pdpSizesWrap').style.display = 'none';
+  }
+
+  // Description
+  document.getElementById('pdpDesc').textContent = p.description || '';
+
+  // Stock meta
+  document.getElementById('pdpStockMeta').innerHTML =
+    `<svg viewBox="0 0 24 24" width="14" height="14" stroke="var(--or)" fill="none" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+    ${p.stock > 0 ? `${p.stock} en stock` : 'Disponible'}`;
+
+  // Galerie
+  renderPDPGallery();
+
+  // Wishlist state
+  const wb = document.getElementById('pdpWishBtn');
+  wb.classList.toggle('active', pdpWished.has(id));
+
+  // Ouvrir
+  const overlay = document.getElementById('pdpOverlay');
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  // Sync cart counts
+  syncCartCount();
+}
+
+function renderPDPGallery() {
+  const mainEl = document.getElementById('pdpMainImg');
+  const thumbEl = document.getElementById('pdpThumbs');
+
+  if (!pdpImages.length) {
+    mainEl.innerHTML = `
+      <div class="placeholder-gallery">
+        <svg viewBox="0 0 100 120" width="100" xmlns="http://www.w3.org/2000/svg" opacity=".2">
+          <ellipse cx="50" cy="20" rx="14" ry="16" fill="#c9a96e"/>
+          <path d="M22,50 Q15,70 18,100 L82,100 Q85,70 78,50 Q65,38 50,36 Q35,38 22,50Z" fill="#c9a96e"/>
+        </svg>
+      </div>`;
+    thumbEl.innerHTML = '';
+    return;
+  }
+
+  // Boutons nav (ne montrer que si > 1 image)
+  const showNav = pdpImages.length > 1;
+  mainEl.innerHTML = `
+    ${showNav ? `<button class="pdp-gallery-nav prev" onclick="event.stopPropagation();galleryNav(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>` : ''}
+    <img src="${pdpImages[pdpImgIndex]}" alt="${pdpProduct.name}" style="width:100%;height:100%;object-fit:cover">
+    ${showNav ? `<button class="pdp-gallery-nav next" onclick="event.stopPropagation();galleryNav(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>` : ''}
+  `;
+
+  thumbEl.innerHTML = pdpImages.map((url, i) => `
+    <div class="pdp-thumb${i===0?' active':''}" onclick="setGalleryIndex(${i})">
+      <img src="${url}" alt="${pdpProduct.name} ${i+1}" loading="lazy"
+        onerror="this.parentElement.style.display='none'">
+    </div>
+  `).join('');
+}
+
+function setGalleryIndex(i) {
+  pdpImgIndex = i;
+  const img = document.querySelector('#pdpMainImg img');
+  if (img) img.src = pdpImages[i];
+  document.querySelectorAll('.pdp-thumb').forEach((t,j) => t.classList.toggle('active', j===i));
+}
+
+function galleryNav(dir) {
+  if (!pdpImages.length) return;
+  pdpImgIndex = (pdpImgIndex + dir + pdpImages.length) % pdpImages.length;
+  setGalleryIndex(pdpImgIndex);
+}
+window.galleryNav = galleryNav;
+window.setGalleryIndex = setGalleryIndex;
+
+function selectPDPSize(s) {
+  pdpSize = s;
+  document.querySelectorAll('.pdp-size-btn').forEach(b => b.classList.toggle('selected-size', b.textContent.trim()===s));
+}
+window.selectPDPSize = selectPDPSize;
+
+function pdpAddToCart() {
+  if (!pdpProduct) return;
+  const sizes  = pdpProduct.sizes || [];
+  const unavail = pdpProduct.unavailable_sizes || [];
+  const avail  = sizes.filter(s => !unavail.includes(s));
+  const size   = pdpSize || avail[0] || 'TU';
+  if (avail.length && !pdpSize) { showToast('Veuillez choisir une taille'); return; }
+  const existing = cart.find(i => i.id===pdpProduct.id && i.size===size);
+  if (existing) existing.qty++;
+  else cart.push({...pdpProduct, size, qty:1});
+  updateCartUI();
+  showToast(`${pdpProduct.name} (${size}) ajouté`);
+}
+window.pdpAddToCart = pdpAddToCart;
+
+function pdpToggleWish() {
+  if (!pdpProduct) return;
+  const id = pdpProduct.id;
+  const btn = document.getElementById('pdpWishBtn');
+  if (pdpWished.has(id)) { pdpWished.delete(id); btn.classList.remove('active'); showToast('Retiré des favoris'); }
+  else                   { pdpWished.add(id);    btn.classList.add('active');    showToast('Ajouté aux favoris ♥'); }
+  // sync wishlist on main grid if visible
+  const wb = document.getElementById(`wish-${id}`);
+  if (wb) wb.classList.toggle('active', pdpWished.has(id));
+}
+window.pdpToggleWish = pdpToggleWish;
+
+function closePDP() {
+  document.getElementById('pdpOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  closeLightbox();
+}
+window.closePDP = closePDP;
+
+// Lightbox
+function openLightbox() {
+  if (!pdpImages.length) return;
+  document.getElementById('pdpLightboxImg').src = pdpImages[pdpImgIndex];
+  document.getElementById('pdpLightboxCounter').textContent = `${pdpImgIndex+1} / ${pdpImages.length}`;
+  document.getElementById('pdpLightbox').classList.add('open');
+}
+window.openLightbox = openLightbox;
+
+function closeLightbox() {
+  document.getElementById('pdpLightbox').classList.remove('open');
+}
+window.closeLightbox = closeLightbox;
+
+function lightboxNav(dir) {
+  if (!pdpImages.length) return;
+  pdpImgIndex = (pdpImgIndex + dir + pdpImages.length) % pdpImages.length;
+  document.getElementById('pdpLightboxImg').src = pdpImages[pdpImgIndex];
+  document.getElementById('pdpLightboxCounter').textContent = `${pdpImgIndex+1} / ${pdpImages.length}`;
+  setGalleryIndex(pdpImgIndex);
+}
+window.lightboxNav = lightboxNav;
+
+// Accordéon
+function toggleAcc(btn) {
+  const content = btn.nextElementSibling;
+  const isOpen  = content.classList.contains('open');
+  // Fermer tous
+  document.querySelectorAll('.pdp-acc-content').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.pdp-acc-trigger').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { content.classList.add('open'); btn.classList.add('open'); }
+}
+window.toggleAcc = toggleAcc;
+
+// Fermer PDP avec Echap
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('pdpLightbox').classList.contains('open')) { closeLightbox(); return; }
+    if (document.getElementById('pdpOverlay').classList.contains('open'))  { closePDP();     return; }
+  }
+  // Flèches dans galerie ou lightbox
+  if (document.getElementById('pdpOverlay').classList.contains('open')) {
+    if (e.key === 'ArrowLeft')  galleryNav(-1);
+    if (e.key === 'ArrowRight') galleryNav(1);
+  }
+});
+
+// Sync cart count in PDP header
+function syncCartCount() {
+  const count = cart.reduce((s,i) => s+i.qty, 0);
+  const el = document.getElementById('cartCountPDP');
+  if (el) el.textContent = count;
+}
+
+// Expose openPDP globally
+window.openPDP = openPDP;
 
 init();
 </script>
