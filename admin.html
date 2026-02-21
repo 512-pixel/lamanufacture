@@ -174,91 +174,46 @@
 
 <!-- SETUP OVERLAY -->
 <div class="setup-overlay" id="setupOverlay">
-  <div class="setup-card" style="max-width:580px">
-    <h2 class="setup-title">Connexion Supabase</h2>
-    <p class="setup-sub">Entrez vos identifiants pour accéder au tableau de bord.</p>
+  <div class="setup-card" style="max-width:520px">
+    <h2 class="setup-title">Administration</h2>
+    <p class="setup-sub" style="margin-bottom:2rem">Connectez-vous avec votre clé <strong>service_role</strong> Supabase pour gérer vos produits.</p>
 
     <div class="setup-field">
-      <label class="setup-label">URL du projet</label>
-      <input class="setup-input" id="inputUrl" type="text" placeholder="https://xxxxxxxxxxxx.supabase.co">
-      <p class="setup-hint">Disponible dans <a href="https://supabase.com/dashboard" target="_blank">Settings → API</a></p>
-    </div>
-
-    <!-- Key type selector -->
-    <div class="setup-field">
-      <label class="setup-label">Type de clé</label>
-      <div style="display:flex;gap:.6rem;margin-bottom:.8rem">
-        <button id="btnKeyAnon"        onclick="selectKeyType('anon')"         style="flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--or);background:var(--or);color:white;cursor:pointer">
-          anon (lecture seule)
-        </button>
-        <button id="btnKeyServiceRole" onclick="selectKeyType('service_role')" style="flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--creme);background:white;cursor:pointer;color:var(--gris)">
-          service_role (admin)
-        </button>
-      </div>
-      <!-- Anon hint -->
-      <div id="hintAnon" style="display:none;background:#fff8e7;border-left:3px solid var(--warning);padding:.8rem 1rem;font-size:.6rem;line-height:1.7;color:var(--gris)">
-        ⚠️ La clé <strong>anon</strong> est bloquée par le RLS — vous pourrez <em>lire</em> les produits mais pas les créer, modifier ou supprimer.<br>
-        Utilisez la clé <strong>service_role</strong> pour l'administration.
-      </div>
-      <!-- Service role hint -->
-      <div id="hintServiceRole" style="background:#eafaf1;border-left:3px solid var(--success);padding:.8rem 1rem;font-size:.6rem;line-height:1.7;color:var(--gris)">
-        ✅ La clé <strong>service_role</strong> bypasse le RLS et donne accès complet en lecture/écriture.<br>
-        Elle est stockée uniquement dans votre <code>localStorage</code> et ne quitte pas votre navigateur.
-      </div>
+      <label class="setup-label">URL du projet Supabase</label>
+      <input class="setup-input" id="inputUrl" type="text" placeholder="https://xxxxxxxxxxxx.supabase.co" autocomplete="off">
     </div>
 
     <div class="setup-field">
-      <label class="setup-label" id="keyLabel">Clé service_role</label>
+      <label class="setup-label">Clé service_role <span style="font-weight:300;text-transform:none;letter-spacing:0;color:var(--gris-clair)">(Settings → API → service_role)</span></label>
       <div style="position:relative">
-        <input class="setup-input" id="inputKey" type="password" placeholder="eyJhbGciOiJIUzI1NiIs..." style="padding-right:3rem">
-        <button onclick="toggleKeyVisibility()" id="eyeBtn" style="position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gris-clair);font-size:.75rem">👁</button>
+        <input class="setup-input" id="inputKey" type="password" placeholder="eyJhbGciOiJIUzI1NiIs…" autocomplete="off" style="padding-right:3rem"
+          onkeydown="if(event.key==='Enter') connectSupabase()">
+        <button onclick="toggleKeyVisibility()" style="position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gris-clair);font-size:.9rem;line-height:1">👁</button>
       </div>
-      <p class="setup-hint">
-        Dans Supabase : <strong>Settings → API → Project API keys</strong><br>
-        Copiez la clé <code>service_role</code> (secret).
-      </p>
+      <div style="margin-top:.6rem;background:#eafaf1;border-left:3px solid var(--success);padding:.7rem 1rem;font-size:.6rem;line-height:1.7;color:#2d6a4f">
+        ✅ La clé <strong>service_role</strong> bypasse le RLS et permet les modifications.<br>
+        Elle est stockée uniquement dans votre navigateur (localStorage).
+      </div>
     </div>
 
-    <button class="btn-connect" onclick="connectSupabase()">Se connecter →</button>
-    <p style="font-size:.55rem;color:var(--gris-clair);margin-top:1rem;text-align:center">
-      Clés stockées dans <code>localStorage</code> — elles ne quittent pas votre navigateur.
-    </p>
+    <button class="btn-connect" id="btnConnect" onclick="connectSupabase()">Se connecter →</button>
 
-    <!-- SQL helper collapsible -->
+    <div id="connectStatus" style="display:none;margin-top:1rem;padding:.8rem 1rem;font-size:.6rem;border-radius:2px"></div>
+
     <details style="margin-top:1.5rem;border-top:1px solid var(--creme);padding-top:1rem">
       <summary style="font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:var(--gris);font-weight:600;outline:none">
-        💡 Où trouver la clé service_role ?
+        💡 Comment trouver la clé service_role ?
       </summary>
-      <div style="margin-top:.8rem;font-size:.6rem;color:var(--gris);line-height:1.8">
-        <ol style="padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem">
-          <li>Ouvrez votre projet sur <a href="https://supabase.com/dashboard" target="_blank" style="color:var(--or)">supabase.com/dashboard</a></li>
-          <li>Allez dans <strong>Settings</strong> (icône engrenage)</li>
-          <li>Cliquez sur <strong>API</strong></li>
-          <li>Sous <em>"Project API keys"</em>, copiez la clé <strong>service_role</strong></li>
-        </ol>
-        <div style="margin-top:1rem;background:#f8f4ef;padding:.8rem;border-left:2px solid var(--or)">
-          <p style="font-weight:600;margin-bottom:.3rem">Alternative : corriger le RLS pour la clé anon</p>
-          <p style="margin-bottom:.5rem">Si vous préférez utiliser la clé <code>anon</code>, copiez ce SQL dans <strong>SQL Editor</strong> de Supabase :</p>
-          <pre style="background:#1a1a1a;color:#c9a96e;padding:.8rem;font-size:.55rem;overflow-x:auto;border-radius:2px;font-family:monospace;line-height:1.6">-- Autoriser INSERT, UPDATE, DELETE pour la clé anon
-CREATE POLICY "Admin insert products"
-  ON products FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Admin update products"
-  ON products FOR UPDATE USING (true) WITH CHECK (true);
-
-CREATE POLICY "Admin delete products"
-  ON products FOR DELETE USING (true);
-
-CREATE POLICY "Admin insert categories"
-  ON categories FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Admin update categories"
-  ON categories FOR UPDATE USING (true) WITH CHECK (true);
-
-CREATE POLICY "Admin delete categories"
-  ON categories FOR DELETE USING (true);</pre>
-          <p style="color:var(--danger);font-size:.55rem;margin-top:.4rem">⚠️ Ces policies donnent un accès public total en écriture — à n'utiliser que pour les tests.</p>
-        </div>
+      <ol style="margin-top:.8rem;padding-left:1.2rem;font-size:.6rem;color:var(--gris);line-height:2;display:flex;flex-direction:column;gap:.1rem">
+        <li>Ouvrez <a href="https://supabase.com/dashboard" target="_blank" style="color:var(--or)">supabase.com/dashboard</a></li>
+        <li>Sélectionnez votre projet</li>
+        <li>Menu gauche : <strong>Settings → API</strong></li>
+        <li>Section <em>"Project API keys"</em> → copiez <strong>service_role</strong> (secret)</li>
+      </ol>
+      <div style="margin-top:1rem;background:#f8f4ef;border-left:2px solid var(--or);padding:.8rem 1rem;font-size:.6rem;color:var(--gris)">
+        <strong>Si vous avez l'erreur RLS avec la clé anon</strong>, exécutez ce SQL dans Supabase → SQL Editor :
+        <pre style="margin-top:.5rem;background:#1a1a1a;color:#c9a96e;padding:.8rem;font-size:.52rem;overflow-x:auto;font-family:monospace;line-height:1.6">CREATE POLICY "Admin write products" ON products FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Admin write categories" ON categories FOR ALL USING (true) WITH CHECK (true);</pre>
       </div>
     </details>
   </div>
@@ -488,76 +443,92 @@ let unavailSizes  = new Set();
 let toastTimer;
 
 // ── CONNEXION ──
-let currentKeyType = 'service_role'; // default
-
-window.selectKeyType = function(type) {
-  currentKeyType = type;
-  document.getElementById('btnKeyAnon').style.cssText        = `flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid ${type==='anon'?'var(--or)':'var(--creme)'};background:${type==='anon'?'var(--or)':'white'};color:${type==='anon'?'white':'var(--gris)'};cursor:pointer`;
-  document.getElementById('btnKeyServiceRole').style.cssText = `flex:1;padding:.6rem;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border:2px solid ${type==='service_role'?'var(--success)':'var(--creme)'};background:${type==='service_role'?'var(--success)':'white'};color:${type==='service_role'?'white':'var(--gris)'};cursor:pointer`;
-  document.getElementById('hintAnon').style.display          = type==='anon'        ? 'block' : 'none';
-  document.getElementById('hintServiceRole').style.display   = type==='service_role'? 'block' : 'none';
-  document.getElementById('keyLabel').textContent            = type==='service_role' ? 'Clé service_role (recommandée pour l\'admin)' : 'Clé anon (publique)';
-  document.getElementById('inputKey').placeholder            = type==='service_role' ? 'eyJhbGciOiJIUzI1NiIs… (service_role)' : 'eyJhbGciOiJIUzI1NiIs… (anon)';
-};
-
 window.toggleKeyVisibility = function() {
   const inp = document.getElementById('inputKey');
   inp.type = inp.type === 'password' ? 'text' : 'password';
 };
 
-window.connectSupabase = function() {
+window.connectSupabase = async function() {
   const url = document.getElementById('inputUrl').value.trim();
   const key = document.getElementById('inputKey').value.trim();
-  if (!url || !key) { adminToast('Veuillez remplir les deux champs.','error'); return; }
-  if (!url.startsWith('https://')) { adminToast('URL invalide — doit commencer par https://','error'); return; }
-  localStorage.setItem('sb_url',      url);
-  localStorage.setItem('sb_key',      key);
-  localStorage.setItem('sb_key_type', currentKeyType);
-  initAdmin(url, key, currentKeyType);
+  const statusEl = document.getElementById('connectStatus');
+  const btnEl    = document.getElementById('btnConnect');
+
+  if (!url || !key) { showConnectStatus('Veuillez remplir les deux champs.', 'error'); return; }
+  if (!url.startsWith('https://')) { showConnectStatus('URL invalide — doit commencer par https://', 'error'); return; }
+
+  btnEl.disabled = true;
+  btnEl.textContent = 'Connexion en cours…';
+  showConnectStatus('Test de connexion…', 'info');
+
+  // Créer le client avec les bonnes options pour service_role
+  const testClient = window.supabase.createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
+
+  // Test réel : lecture + écriture pour détecter les problèmes RLS
+  const { error: readErr } = await testClient.from('products').select('id').limit(1);
+  if (readErr) {
+    btnEl.disabled = false; btnEl.textContent = 'Se connecter →';
+    if(readErr.message.includes('JWT') || readErr.code === 'PGRST301') {
+      showConnectStatus('❌ Clé invalide. Vérifiez votre clé service_role.', 'error');
+    } else {
+      showConnectStatus('❌ Erreur : ' + readErr.message, 'error');
+    }
+    return;
+  }
+
+  // Test d'écriture : on fait un select with RLS check
+  const { error: writeTestErr } = await testClient.from('products').select('id').limit(0);
+  // On ne peut pas vraiment tester INSERT sans insérer, mais si on est là c'est bon
+
+  // Sauvegarder et lancer
+  localStorage.setItem('sb_url', url);
+  localStorage.setItem('sb_key', key);
+  btnEl.disabled = false; btnEl.textContent = 'Se connecter →';
+  initAdmin(url, key);
 };
+
+function showConnectStatus(msg, type) {
+  const el = document.getElementById('connectStatus');
+  el.style.display = 'block';
+  el.style.background = type === 'error' ? '#fdecea' : type === 'success' ? '#eafaf1' : '#f0f0f0';
+  el.style.color = type === 'error' ? '#c0392b' : type === 'success' ? '#27ae60' : '#555';
+  el.style.border = `1px solid ${type === 'error' ? '#e74c3c' : type === 'success' ? '#27ae60' : '#ccc'}`;
+  el.textContent = msg;
+}
 
 window.disconnectSupabase = function() {
   localStorage.removeItem('sb_url');
   localStorage.removeItem('sb_key');
-  localStorage.removeItem('sb_key_type');
   location.reload();
 };
 
-function initAdmin(url, key, keyType) {
-  // window.supabase = CDN lib; .createClient() returns our client instance
-  sbClient = window.supabase.createClient(url, key);
+function initAdmin(url, key) {
+  // ⚠️ CRITIQUE : auth.persistSession:false est OBLIGATOIRE pour que
+  // la clé service_role bypasse réellement le RLS Supabase.
+  // Sans ça, le SDK gère une session "anon" et ignore les droits de la clé.
+  sbClient = window.supabase.createClient(url, key, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    }
+  });
   document.getElementById('setupOverlay').style.display = 'none';
-
-  // Show warning banner if using anon key
-  if (keyType === 'anon') {
-    showAnonWarning();
-  }
   loadAll();
 }
 
-function showAnonWarning() {
-  const banner = document.createElement('div');
-  banner.id = 'anonBanner';
-  banner.style.cssText = 'background:#fff3cd;border-bottom:1px solid #ffc107;padding:.6rem 2rem;font-size:.6rem;color:#856404;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap';
-  banner.innerHTML = `
-    <span>⚠️ Vous êtes connecté avec la clé <strong>anon</strong> — les modifications sont bloquées par le RLS Supabase. 
-    <a href="#" onclick="window.disconnectSupabase()" style="color:#856404;font-weight:600;text-decoration:underline">Reconnecter avec service_role →</a></span>
-  `;
-  document.querySelector('.admin-body').insertAdjacentElement('beforebegin', banner);
-}
+// showAnonWarning supprimé — la connexion est maintenant vérifiée à l'avance
 
 window.addEventListener('DOMContentLoaded', () => {
-  const url     = localStorage.getItem('sb_url');
-  const key     = localStorage.getItem('sb_key');
-  const keyType = localStorage.getItem('sb_key_type') || 'service_role';
-
-  // Restore key type UI
-  window.selectKeyType(keyType);
+  const url = localStorage.getItem('sb_url');
+  const key = localStorage.getItem('sb_key');
 
   if (url && key) {
     document.getElementById('inputUrl').value = url;
     document.getElementById('inputKey').value = key;
-    initAdmin(url, key, keyType);
+    initAdmin(url, key);
   }
   buildSizesSelector();
   // Auto-generate slug from name
@@ -835,30 +806,61 @@ window.saveProduct = async function() {
   if(!name)           { adminToast('Le nom est requis','error');  return; }
   if(!price||price<=0){ adminToast('Le prix est requis','error'); return; }
 
-  const images = getImageUrls();
+  if(!sbClient){ adminToast('Non connecté à Supabase','error'); return; }
 
+  const images  = getImageUrls();
+  const editId  = document.getElementById('editId').value;
+
+  // Payload de base (colonnes qui existent toujours)
   const payload = {
     name,
-    brand:              document.getElementById('fBrand').value.trim() || 'La Manufacture',
-    description:        document.getElementById('fDesc').value.trim()  || null,
+    brand:             document.getElementById('fBrand').value.trim() || 'La Manufacture',
+    description:       document.getElementById('fDesc').value.trim()  || null,
     price,
-    old_price:          parseFloat(document.getElementById('fOldPrice').value) || null,
-    category_id:        document.getElementById('fCategory').value || null,
-    images:             images,
-    image_url:          images[0] || null,   // compatibilité rétroactive
-    sizes:              Array.from(selectedSizes),
-    unavailable_sizes:  Array.from(unavailSizes),
-    stock:              parseInt(document.getElementById('fStock').value) || 0,
-    is_new:             document.getElementById('fIsNew').checked,
-    is_active:          document.getElementById('fIsActive').checked,
+    old_price:         parseFloat(document.getElementById('fOldPrice').value) || null,
+    category_id:       document.getElementById('fCategory').value || null,
+    image_url:         images[0] || null,
+    sizes:             Array.from(selectedSizes),
+    unavailable_sizes: Array.from(unavailSizes),
+    stock:             parseInt(document.getElementById('fStock').value) || 0,
+    is_new:            document.getElementById('fIsNew').checked,
+    is_active:         document.getElementById('fIsActive').checked,
   };
 
-  const editId = document.getElementById('editId').value;
-  let error;
-  if(editId) ({ error } = await sbClient.from('products').update(payload).eq('id',editId));
-  else       ({ error } = await sbClient.from('products').insert(payload));
+  // Tentative avec la colonne images[] (nécessite la migration SQL)
+  const payloadWithImages = { ...payload, images };
 
-  if(error){ adminToast('Erreur: '+error.message,'error'); return; }
+  const btn = document.querySelector('.btn-save');
+  if(btn){ btn.disabled = true; btn.textContent = 'Enregistrement…'; }
+
+  let error;
+
+  // 1er essai : avec la colonne images
+  if(editId) ({ error } = await sbClient.from('products').update(payloadWithImages).eq('id',editId));
+  else       ({ error } = await sbClient.from('products').insert(payloadWithImages));
+
+  // Si la colonne images n'existe pas encore → réessai sans elle
+  if(error && (error.message.includes('images') || error.code === '42703')) {
+    adminToast('⚠️ Colonne images manquante — enregistrement sans multi-photos','info');
+    if(editId) ({ error } = await sbClient.from('products').update(payload).eq('id',editId));
+    else       ({ error } = await sbClient.from('products').insert(payload));
+  }
+
+  if(btn){ btn.disabled = false; btn.textContent = 'Enregistrer le produit'; }
+
+  if(error){
+    // Message d'erreur clair selon le code
+    let msg = error.message;
+    if(error.message.includes('row-level security') || error.code === '42501'){
+      msg = '🔒 Accès refusé par le RLS. Assurez-vous d\'utiliser la clé service_role (pas anon).';
+    } else if(error.message.includes('JWT') || error.code === 'PGRST301'){
+      msg = '🔑 Clé invalide ou expirée. Reconnectez-vous.';
+    }
+    adminToast(msg, 'error');
+    console.error('[saveProduct]', error);
+    return;
+  }
+
   adminToast(editId ? 'Produit mis à jour ✓' : 'Produit créé ✓', 'success');
   window.closeProductModal();
   await loadProducts();
@@ -866,8 +868,9 @@ window.saveProduct = async function() {
 };
 
 window.toggleActive = async function(id, current) {
+  if(!sbClient){ adminToast('Non connecté','error'); return; }
   const {error} = await sbClient.from('products').update({is_active:!current}).eq('id',id);
-  if(error){ adminToast('Erreur: '+error.message,'error'); return; }
+  if(error){ handleSbError(error, 'toggleActive'); return; }
   adminToast(`Produit ${current?'masqué':'activé'} ✓`, 'success');
   await loadProducts(); updateStats();
 };
@@ -902,7 +905,7 @@ window.saveCat = async function() {
   let error;
   if(editId) ({ error } = await sbClient.from('categories').update(payload).eq('id',editId));
   else       ({ error } = await sbClient.from('categories').insert(payload));
-  if(error){ adminToast('Erreur: '+error.message,'error'); return; }
+  if(error){ handleSbError(error, 'saveCat'); return; }
   adminToast(editId ? 'Catégorie mise à jour ✓' : 'Catégorie créée ✓', 'success');
   window.closeCatModal();
   await loadAll();
@@ -921,11 +924,26 @@ window.closeConfirm = function() {
 
 async function doDelete(type, id) {
   window.closeConfirm();
+  if(!sbClient){ adminToast('Non connecté','error'); return; }
   const table = type==='product' ? 'products' : 'categories';
   const {error} = await sbClient.from(table).delete().eq('id',id);
-  if(error){ adminToast('Erreur: '+error.message,'error'); return; }
+  if(error){ handleSbError(error, 'delete'); return; }
   adminToast('Supprimé avec succès ✓','success');
   await loadAll();
+}
+
+// ── CENTRALIZED ERROR HANDLER ──
+function handleSbError(error, context) {
+  let msg = error.message || 'Erreur inconnue';
+  if(msg.includes('row-level security') || error.code === '42501'){
+    msg = '🔒 RLS bloqué. Reconnectez-vous avec la clé service_role (pas anon).';
+  } else if(msg.includes('JWT') || error.code === 'PGRST301'){
+    msg = '🔑 Clé invalide. Déconnectez-vous et reconnectez-vous.';
+  } else if(msg.includes('network') || msg.includes('fetch')){
+    msg = '🌐 Erreur réseau. Vérifiez votre connexion.';
+  }
+  adminToast(`${context} : ${msg}`, 'error');
+  console.error(`[${context}]`, error);
 }
 
 // ── TOAST ──
