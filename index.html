@@ -40,10 +40,18 @@
   .nav-icon:hover svg{stroke:var(--noir)}
   .cart-count{position:absolute;top:-6px;right:-6px;background:var(--or);color:white;font-size:.5rem;font-weight:600;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
   .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer}
-  .hamburger span{width:24px;height:1px;background:var(--);transition:.3s}
+  .hamburger span{width:24px;height:1px;background:var(--noir);transition:.3s}
+
+  /* ── MARQUEE ── */
+  .marquee-wrap{position:fixed;top:64px;left:0;width:100%;z-index:999;overflow:hidden;border-top:1px solid var(--creme);border-bottom:1px solid var(--creme);padding:.7rem 0;background:var(--fond)}
+  .marquee-wrap.with-banner{top:calc(38px + 64px)}
+  .marquee-track{display:flex;gap:4rem;animation:marquee 25s linear infinite;width:max-content}
+  .marquee-item{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--or);font-weight:500;white-space:nowrap;display:flex;align-items:center;gap:4rem}
+  .marquee-item::after{content:'✦';font-size:.5rem}
+  @keyframes marquee{to{transform:translateX(-50%)}}
 
   /* ── HERO ── */
-  .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:80px;overflow:hidden}
+  .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:110px;overflow:hidden}
   .hero-text{display:flex;flex-direction:column;justify-content:center;padding:6rem 4rem 6rem 8rem;position:relative}
   .hero-text::before{content:'SS25';font-family:'Cormorant Garamond',serif;font-size:12rem;font-weight:300;color:rgba(201,169,110,.06);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none}
   .hero-sub{font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:var(--or);margin-bottom:1.5rem;animation:fadeUp 1s ease both}
@@ -51,22 +59,15 @@
   .hero-title em{font-style:italic;color:var(--or)}
   .hero-desc{font-size:.75rem;line-height:1.9;color:var(--gris);max-width:340px;margin-bottom:3rem;animation:fadeUp 1s .3s ease both}
   .hero-cta{display:flex;gap:1.2rem;flex-wrap:wrap;animation:fadeUp 1s .45s ease both}
-  .btn-primary{background:var(--);color:var(--blanc);padding:1rem 2.4rem;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;font-weight:500;border:none;cursor:pointer;text-decoration:none;transition:background .3s;display:inline-block}
+  .btn-primary{background:var(--noir);color:var(--blanc);padding:1rem 2.4rem;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;font-weight:500;border:none;cursor:pointer;text-decoration:none;transition:background .3s;display:inline-block}
   .btn-primary:hover{background:var(--or)}
-  .btn-outline{background:transparent;color:var(--);padding:1rem 2.4rem;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;font-weight:500;border:1px solid var(--);cursor:pointer;text-decoration:none;transition:background .3s,color .3s;display:inline-block}
-  .btn-outline:hover{background:var(--);color:var(--blanc)}
+  .btn-outline{background:transparent;color:var(--noir);padding:1rem 2.4rem;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;font-weight:500;border:1px solid var(--noir);cursor:pointer;text-decoration:none;transition:background .3s,color .3s;display:inline-block}
+  .btn-outline:hover{background:var(--noir);color:var(--blanc)}
   .hero-image{position:relative;overflow:hidden;animation:fadeIn 1.2s ease both}
   .hero-image-inner{width:100%;height:100%;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 50%,#3a2a1a 100%);display:flex;align-items:center;justify-content:center}
   .hero-figure{width:60%;max-width:320px;position:relative;z-index:2}
   .hero-badge{position:absolute;bottom:3rem;left:-2rem;background:var(--or);color:white;padding:1.2rem 1.5rem;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;z-index:3}
   .hero-badge strong{display:block;font-size:1.2rem;font-family:'Cormorant Garamond',serif;font-weight:400;letter-spacing:0}
-
-  /* ── MARQUEE ── */
-  .marquee-wrap{overflow:hidden;border-top:1px solid var(--creme);border-bottom:1px solid var(--creme);padding:1rem 0;background:var(--)}
-  .marquee-track{display:flex;gap:4rem;animation:marquee 25s linear infinite;width:max-content}
-  .marquee-item{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--or);font-weight:500;white-space:nowrap;display:flex;align-items:center;gap:4rem}
-  .marquee-item::after{content:'✦';font-size:.5rem}
-  @keyframes marquee{to{transform:translateX(-50%)}}
 
   /* ── SECTIONS ── */
   .section{padding:6rem 4rem}
@@ -90,7 +91,7 @@
   .filters-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
   .filter-chips{display:flex;gap:.6rem;flex-wrap:wrap}
   .chip{padding:.5rem 1.2rem;border:1px solid var(--creme);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;background:transparent;transition:background .25s,border-color .25s,color .25s;font-family:'Montserrat',sans-serif;color:var(--gris)}
-  .chip.active,.chip:hover{background:var(--);border-color:var(--);color:white}
+  .chip.active,.chip:hover{background:var(--noir);border-color:var(--noir);color:white}
   .sort-select{font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--creme);background:transparent;padding:.5rem 2rem .5rem 1rem;cursor:pointer;color:var(--gris);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239a9a9a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center}
 
   /* ── PRODUCTS ── */
@@ -102,7 +103,7 @@
   .product-img-wrap{overflow:hidden;aspect-ratio:3/4;position:relative;margin-bottom:1.2rem;background:var(--creme)}
   .product-thumb{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
   .product-thumb.placeholder-img{display:flex;align-items:center;justify-content:center;background:var(--creme)}
-  .badge-new{position:absolute;top:1rem;left:1rem;background:var(--);color:white;font-size:.5rem;letter-spacing:.2em;padding:.3rem .7rem;text-transform:uppercase}
+  .badge-new{position:absolute;top:1rem;left:1rem;background:var(--noir);color:white;font-size:.5rem;letter-spacing:.2em;padding:.3rem .7rem;text-transform:uppercase}
   .badge-sale{position:absolute;top:1rem;left:1rem;background:var(--or);color:white;font-size:.5rem;letter-spacing:.2em;padding:.3rem .7rem;text-transform:uppercase}
   .wishlist-btn{position:absolute;top:1rem;right:1rem;background:white;border:none;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
   .product-card:hover .wishlist-btn{opacity:1}
@@ -111,9 +112,9 @@
   .product-actions{position:absolute;bottom:0;left:0;right:0;padding:1rem;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s}
   .size-quick{display:flex;gap:.4rem;margin-bottom:.6rem;flex-wrap:wrap}
   .size-btn{background:white;border:1px solid var(--creme);font-size:.5rem;font-weight:600;padding:.3rem .5rem;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .2s,border-color .2s;min-width:32px;text-align:center}
-  .size-btn:hover,.size-btn.selected{background:var(--);color:white;border-color:var(--)}
+  .size-btn:hover,.size-btn.selected{background:var(--noir);color:white;border-color:var(--noir)}
   .size-btn.unavailable{opacity:.3;cursor:not-allowed}
-  .add-to-cart{width:100%;background:var(--);color:white;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:.75rem;transition:background .3s;font-weight:500}
+  .add-to-cart{width:100%;background:var(--noir);color:white;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:.75rem;transition:background .3s;font-weight:500}
   .add-to-cart:hover{background:var(--or)}
   .product-meta{padding:0 .2rem}
   .product-brand{font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--or);margin-bottom:.3rem}
@@ -121,7 +122,7 @@
   .product-price{display:flex;gap:.8rem;align-items:baseline}
   .price-current{font-size:.9rem;font-weight:500}
   .price-old{font-size:.75rem;color:var(--gris-clair);text-decoration:line-through}
-  .add-mobile{display:none;width:100%;background:var(--);color:white;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.65rem;margin-top:.6rem;font-weight:500}
+  .add-mobile{display:none;width:100%;background:var(--noir);color:white;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.65rem;margin-top:.6rem;font-weight:500}
   @media(hover:none){.add-mobile{display:block}.product-actions{display:none!important}}
 
   /* ── LOADING / EMPTY ── */
@@ -161,13 +162,13 @@
   .cart-total{display:flex;justify-content:space-between;margin-bottom:1.5rem}
   .cart-total-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gris)}
   .cart-total-amount{font-family:'Cormorant Garamond',serif;font-size:1.5rem}
-  .checkout-btn{width:100%;background:var(--);color:white;border:none;cursor:pointer;padding:1.1rem;font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;font-weight:500;transition:background .3s}
+  .checkout-btn{width:100%;background:var(--noir);color:white;border:none;cursor:pointer;padding:1.1rem;font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;font-weight:500;transition:background .3s}
   .checkout-btn:hover{background:var(--or)}
   .cart-empty{text-align:center;padding:3rem;color:var(--gris-clair)}
   .cart-empty p{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;margin-bottom:1rem}
 
   /* ── NEWSLETTER ── */
-  .newsletter{background:var(--);color:var(--blanc);padding:6rem 4rem;text-align:center;position:relative;overflow:hidden}
+  .newsletter{background:var(--noir);color:var(--blanc);padding:6rem 4rem;text-align:center;position:relative;overflow:hidden}
   .newsletter::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,169,110,.08) 0%,transparent 70%)}
   .newsletter-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:300;margin-bottom:1rem;position:relative}
   .newsletter-sub{font-size:.7rem;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:2.5rem;position:relative}
@@ -197,14 +198,14 @@
   .social-link:hover svg{fill:white}
 
   /* ── TOAST ── */
-  .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--);color:white;padding:.9rem 2rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;z-index:3000;transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:.8rem;white-space:nowrap}
+  .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--noir);color:white;padding:.9rem 2rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;z-index:3000;transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:.8rem;white-space:nowrap}
   .toast.show{transform:translateX(-50%) translateY(0)}
   .toast-icon{width:16px;height:16px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
   /* ── MOBILE MENU ── */
   .mobile-menu{position:fixed;inset:0;z-index:1500;background:var(--fond);display:flex;flex-direction:column;padding:6rem 3rem 3rem;transform:translateX(-100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
   .mobile-menu.open{transform:translateX(0)}
-  .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--);text-decoration:none;padding:.8rem 0;border-bottom:1px solid var(--creme);display:block;transition:color .3s,padding-left .3s;cursor:pointer}
+  .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--noir);text-decoration:none;padding:.8rem 0;border-bottom:1px solid var(--creme);display:block;transition:color .3s,padding-left .3s;cursor:pointer}
   .mobile-menu a:hover{color:var(--or);padding-left:.5rem}
   .mobile-close{position:absolute;top:1.5rem;right:2rem;background:none;border:none;font-size:1.8rem;cursor:pointer;color:var(--gris)}
 
@@ -229,6 +230,7 @@
     .products-section{padding:2rem 2rem 4rem}
     .footer-grid{grid-template-columns:1fr 1fr}
     .newsletter{padding:4rem 2rem}
+    .marquee-wrap{top:60px}
   }
   @media(max-width:600px){
     .categories-grid{grid-template-columns:1fr 1fr;gap:1rem}
@@ -396,17 +398,8 @@
   </div>
 </nav>
 
-<!-- Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" onclick="toggleMobileMenu()">✕</button>
-  <a onclick="filterCat('Tous');toggleMobileMenu()">Tous les produits</a>
-  <a onclick="filterCat('Femme');toggleMobileMenu()">Femme</a>
-  <a onclick="filterCat('Homme');toggleMobileMenu()">Homme</a>
-  <a onclick="filterCat('Enfant');toggleMobileMenu()">Enfant</a>
-  <a onclick="filterCat('Accessoires');toggleMobileMenu()">Accessoires</a>
-  <a href="admin.html" style="color:var(--or)">Admin ⚙️</a>
-</div>
-
+<!-- MARQUEE (fixé juste sous le header) -->
+<div class="marquee-wrap" id="marqueeWrap">
   <div class="marquee-track">
     <span class="marquee-item">Livraison offerte dès 150€</span>
     <span class="marquee-item">Nouvelle collection SS25</span>
@@ -421,6 +414,17 @@
   </div>
 </div>
 
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMobileMenu()">✕</button>
+  <a onclick="filterCat('Tous');toggleMobileMenu()">Tous les produits</a>
+  <a onclick="filterCat('Femme');toggleMobileMenu()">Femme</a>
+  <a onclick="filterCat('Homme');toggleMobileMenu()">Homme</a>
+  <a onclick="filterCat('Enfant');toggleMobileMenu()">Enfant</a>
+  <a onclick="filterCat('Accessoires');toggleMobileMenu()">Accessoires</a>
+  <a href="admin.html" style="color:var(--or)">Admin ⚙️</a>
+</div>
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-text">
@@ -431,13 +435,10 @@
       <a href="#categories" class="btn-outline">Catégories</a>
     </div>
   </div>
- 
-    </div>
+  <div class="hero-image">
+    <div class="hero-image-inner"></div>
   </div>
 </section>
-
-<!-- MARQUEE -->
-
 
 <!-- CATEGORIES -->
 <section class="section" id="categories">
@@ -551,7 +552,6 @@
         <button class="pdp-gallery-nav next" onclick="event.stopPropagation();galleryNav(1)">
           <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
-        <!-- image injectée dynamiquement -->
       </div>
       <div class="pdp-thumbs" id="pdpThumbs"></div>
     </div>
@@ -658,12 +658,11 @@
 // ════════════════════════════════════════════
 // ⚙️  CONFIGURATION — Remplacez ces valeurs
 // ════════════════════════════════════════════
-const SUPABASE_URL      = 'https://gjwiroqpsikbhwjcruwf.supabase.co';      // ex: https://xxxx.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdqd2lyb3Fwc2lrYmh3amNydXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2OTc2NTEsImV4cCI6MjA4NzI3MzY1MX0.8DKrtmhIZ7YpkntGg_s3sGWWDhe76mcrpY1Ei6h_aTs'; // clé publique "anon"
+const SUPABASE_URL      = 'https://gjwiroqpsikbhwjcruwf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdqd2lyb3Fwc2lrYmh3amNydXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2OTc2NTEsImV4cCI6MjA4NzI3MzY1MX0.8DKrtmhIZ7YpkntGg_s3sGWWDhe76mcrpY1Ei6h_aTs';
 // ════════════════════════════════════════════
 
 const isConfigured = SUPABASE_URL !== 'VOTRE_URL_SUPABASE';
-// ⚠️ Renamed to avoid conflict with the global `supabase` object from the CDN lib
 let sbClient = null;
 let allProducts = [];
 let allCategories = [];
@@ -676,10 +675,10 @@ async function init() {
   if (!isConfigured) {
     document.getElementById('configBanner').style.display = 'block';
     document.getElementById('mainNav').classList.add('with-banner');
+    document.getElementById('marqueeWrap').classList.add('with-banner');
     renderSkeletons();
     return;
   }
-  // window.supabase is the CDN library; .createClient() returns our client instance
   sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   await loadCategories();
   await loadProducts();
@@ -737,7 +736,6 @@ async function loadProducts() {
     .order('created_at', { ascending: false });
   if (error) { console.error(error); showToast('Erreur de chargement'); return; }
   allProducts = data;
-  // Update category counts
   allCategories.forEach(cat => {
     const count = allProducts.filter(p => p.category_id === cat.id).length;
     const el = document.getElementById(`count-${cat.id}`);
@@ -774,7 +772,6 @@ function renderProducts(filter=currentFilter, sortVal='default') {
     const sizes = p.sizes || [];
     const unavail = p.unavailable_sizes || [];
     const hasSale = !!p.old_price;
-    // Support both legacy image_url and new images array
     const thumb = (p.images && p.images.length) ? p.images[0] : p.image_url;
     return `
     <div class="product-card" data-id="${p.id}" onclick="openPDP('${p.id}')">
@@ -963,15 +960,12 @@ function openPDP(id) {
   pdpImgIndex = 0;
   pdpSize     = null;
 
-  // Breadcrumb
   document.getElementById('pdpBreadcrumb').innerHTML =
     `Boutique / <span>${p.categories?.name || ''}</span> / ${p.name}`;
 
-  // Brand & Name
   document.getElementById('pdpBrand').textContent = p.brand || 'La Manufacture';
   document.getElementById('pdpName').textContent  = p.name;
 
-  // Prix
   document.getElementById('pdpPrice').textContent = Number(p.price).toFixed(2).replace('.',',') + ' €';
   const oldEl = document.getElementById('pdpOldPrice');
   const discEl = document.getElementById('pdpDiscount');
@@ -985,7 +979,6 @@ function openPDP(id) {
     oldEl.style.display = discEl.style.display = 'none';
   }
 
-  // Tailles
   const sizes   = p.sizes || [];
   const unavail = p.unavailable_sizes || [];
   const sizesEl = document.getElementById('pdpSizes');
@@ -1000,28 +993,22 @@ function openPDP(id) {
     document.getElementById('pdpSizesWrap').style.display = 'none';
   }
 
-  // Description
   document.getElementById('pdpDesc').textContent = p.description || '';
 
-  // Stock meta
   document.getElementById('pdpStockMeta').innerHTML =
     `<svg viewBox="0 0 24 24" width="14" height="14" stroke="var(--or)" fill="none" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
     ${p.stock > 0 ? `${p.stock} en stock` : 'Disponible'}`;
 
-  // Galerie
   renderPDPGallery();
 
-  // Wishlist state
   const wb = document.getElementById('pdpWishBtn');
   wb.classList.toggle('active', pdpWished.has(id));
 
-  // Ouvrir
   const overlay = document.getElementById('pdpOverlay');
   overlay.classList.add('open');
   overlay.scrollTop = 0;
   document.body.style.overflow = 'hidden';
 
-  // Sync cart counts
   syncCartCount();
 }
 
@@ -1041,7 +1028,6 @@ function renderPDPGallery() {
     return;
   }
 
-  // Boutons nav (ne montrer que si > 1 image)
   const showNav = pdpImages.length > 1;
   mainEl.innerHTML = `
     ${showNav ? `<button class="pdp-gallery-nav prev" onclick="event.stopPropagation();galleryNav(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>` : ''}
@@ -1099,7 +1085,6 @@ function pdpToggleWish() {
   const btn = document.getElementById('pdpWishBtn');
   if (pdpWished.has(id)) { pdpWished.delete(id); btn.classList.remove('active'); showToast('Retiré des favoris'); }
   else                   { pdpWished.add(id);    btn.classList.add('active');    showToast('Ajouté aux favoris ♥'); }
-  // sync wishlist on main grid if visible
   const wb = document.getElementById(`wish-${id}`);
   if (wb) wb.classList.toggle('active', pdpWished.has(id));
 }
@@ -1112,7 +1097,6 @@ function closePDP() {
 }
 window.closePDP = closePDP;
 
-// Lightbox
 function openLightbox() {
   if (!pdpImages.length) return;
   document.getElementById('pdpLightboxImg').src = pdpImages[pdpImgIndex];
@@ -1135,38 +1119,32 @@ function lightboxNav(dir) {
 }
 window.lightboxNav = lightboxNav;
 
-// Accordéon
 function toggleAcc(btn) {
   const content = btn.nextElementSibling;
   const isOpen  = content.classList.contains('open');
-  // Fermer tous
   document.querySelectorAll('.pdp-acc-content').forEach(c => c.classList.remove('open'));
   document.querySelectorAll('.pdp-acc-trigger').forEach(b => b.classList.remove('open'));
   if (!isOpen) { content.classList.add('open'); btn.classList.add('open'); }
 }
 window.toggleAcc = toggleAcc;
 
-// Fermer PDP avec Echap
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('pdpLightbox').classList.contains('open')) { closeLightbox(); return; }
     if (document.getElementById('pdpOverlay').classList.contains('open'))  { closePDP();     return; }
   }
-  // Flèches dans galerie ou lightbox
   if (document.getElementById('pdpOverlay').classList.contains('open')) {
     if (e.key === 'ArrowLeft')  galleryNav(-1);
     if (e.key === 'ArrowRight') galleryNav(1);
   }
 });
 
-// Sync cart count in PDP header
 function syncCartCount() {
   const count = cart.reduce((s,i) => s+i.qty, 0);
   const el = document.getElementById('cartCountPDP');
   if (el) el.textContent = count;
 }
 
-// Expose openPDP globally
 window.openPDP = openPDP;
 
 init();
