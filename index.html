@@ -451,6 +451,10 @@
         </svg>
       </div>
     </div>
+    <div class="hero-badge" id="heroBadge" style="display:none">
+      <strong id="heroBadgeName"></strong>
+      <span id="heroBadgePrice"></span>
+    </div>
     <!-- Overlay "Voir le produit" au hover -->
     <div style="position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:flex-end;justify-content:center;padding-bottom:5rem;transition:background .3s;pointer-events:none" id="heroOverlay">
       <span style="background:var(--or);color:white;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;padding:.7rem 1.8rem;font-weight:600;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s" id="heroOverlayBtn">Voir le produit →</span>
@@ -460,22 +464,22 @@
 
 <!-- CATEGORIES -->
 <section class="section" id="categories">
-  <div class="section-header fade-up">
+  <div class="section-header">
     <span class="section-label">Explorer</span>
     <h2 class="section-title">Nos Catégories</h2>
   </div>
-  <div class="categories-grid fade-up" id="categoriesGrid">
+  <div class="categories-grid" id="categoriesGrid">
     <!-- populated dynamically -->
   </div>
 </section>
 
 <!-- PRODUCTS -->
 <section class="products-section" id="products">
-  <div class="section-header fade-up">
+  <div class="section-header">
     <span class="section-label">Sélection</span>
     <h2 class="section-title">Nos Produits</h2>
   </div>
-  <div class="filters-bar fade-up">
+  <div class="filters-bar">
     <div class="filter-chips" id="filterChips">
       <button class="chip active" onclick="filterCat('Tous')">Tous</button>
     </div>
@@ -976,6 +980,11 @@ window.toggleMobileMenu = toggleMobileMenu;
 function initScrollObserver() {
   const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.1});
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+  // Force visible for elements already in viewport
+  setTimeout(() => document.querySelectorAll('.fade-up').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight) el.classList.add('visible');
+  }), 100);
 }
 
 // Custom cursor
